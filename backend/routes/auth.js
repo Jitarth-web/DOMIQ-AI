@@ -19,16 +19,16 @@ const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'domiq_refresh_jwt_
 function setAuthCookies(res, accessToken, refreshToken) {
   res.cookie('domiq_access_token', accessToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
+    secure: true,
+    sameSite: 'none',
     maxAge: 15 * 60 * 1000 // 15 minutes
   });
 
   if (refreshToken) {
     res.cookie('domiq_refresh_token', refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      secure: true,
+      sameSite: 'none',
       maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
     });
   }
