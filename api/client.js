@@ -2,11 +2,8 @@ import { ApiError, NetworkError, TimeoutError, AuthenticationError } from './err
 import { injectAuthHeader, handleAuthError } from './auth.js';
 import { requestInterceptors, responseInterceptors } from './interceptors.js';
 
-export const baseUrl = import.meta.env.VITE_API_BASE_URL || (
-  (window.location.protocol === 'file:' || !window.location.hostname)
-    ? 'http://localhost:5000'
-    : `${window.location.protocol}//${window.location.hostname}:5000`
-);
+export const baseUrl =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 
 const DEFAULT_TIMEOUT = 15000;
 const MAX_RETRIES = 5;
