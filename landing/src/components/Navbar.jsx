@@ -57,17 +57,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Navigation Links */}
-      <div className="hidden md:flex items-center gap-12">
-        {['Platform', 'Showcase', 'Pricing'].map((link) => (
-          <MagneticButton key={link} className="relative group cursor-pointer py-2">
-            <span className="text-base font-semibold text-white/70 group-hover:text-white group-hover:tracking-[0.15em] transition-all duration-300 ease-out">{link}</span>
-            {/* Center-out animated underline */}
-            <span className="absolute bottom-0 left-1/2 w-0 h-[2px] bg-white -translate-x-1/2 group-hover:w-full transition-all duration-300 ease-out"></span>
-          </MagneticButton>
-        ))}
-      </div>
-
       {/* CTA Button */}
       <MagneticButton 
         id="cta-start-designing" 
