@@ -1,0 +1,5 @@
+node_modules/
+.env
+dist/
+build/
+landing/src/assets/house.mp4

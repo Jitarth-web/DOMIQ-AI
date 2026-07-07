@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DomIQ AI — AI Home Studio</title>
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Draw, plan, visualize and redesign your home in 2D and 3D with intelligent AI assistance. Design your dream home with DomIQ AI.">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=Syncopate:ital,wght@0,400;0,700;1,700&family=Space+Grotesk:wght@400;500;600;700&family=Unbounded:wght@400;700;900&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+  <!-- Three.js and OrbitControls -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <!-- Three.js Post-processing -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+</head>
+<body class="dark-mode">
+
+  <!-- ==========================================
+       LANDING PAGE VIEW
+       ========================================== -->
+  <div id="landing-page" class="view active" style="position: relative;">
+    <div id="root"></div>
+  </div>
+
+  <!-- ==========================================
+       DASHBOARD VIEW
+       ========================================== -->
+  <div id="dashboard-page" class="view" style="position: relative; min-height: 100vh; overflow: hidden;">
+    <!-- Google Antigravity-Inspired Cursor-Following Particle Field Canvas -->
+    <canvas id="dashboard-particles-canvas" class="dashboard-particles-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none;"></canvas>
+    
+    <header class="studio-header" style="position: relative; z-index: 1;">
+      <div class="logo-container" onclick="app.openLandingPage()">
+        <svg viewBox="0 0 24 24" width="20" height="20">
+          <path d="M12 2L2 12h3v8h6v-6h2v6h6v-8h3L12 2z" fill="url(#logo-grad)"/>
+        </svg>
+        <span class="logo-text text-sm">Dom IQ <span class="logo-accent">AI</span></span>
+        <span class="logo-badge">Dashboard</span>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-secondary btn-icon" onclick="app.openLandingPage()" title="Back to home">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </button>
+        <div class="user-avatar-badge">
+          <span class="user-initials">JD</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="dashboard-content" style="position: relative; z-index: 1;">
+      <div class="dashboard-welcome">
+        <h2>Welcome back, <span class="gradient-text font-outfit">John Doe</span></h2>
+        <p>Architect Account &bull; Pro Member</p>
+      </div>
+
+      <!-- Quick Action Cards -->
+      <section class="dashboard-section">
+        <h3>Create New Project</h3>
+        <div class="templates-grid">
+          <!-- Blank Project Card -->
+          <div class="template-card blank glass" onclick="projects.createNewBlank()">
+            <div class="card-art">
+              <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </div>
+            <h4>Blank Project</h4>
+            <p>Start a design from scratch. Custom canvas constraints.</p>
+          </div>
+          
+          <!-- Presets -->
+          <div class="template-card glass" onclick="projects.createFromTemplate('studio')">
+            <div class="card-img-placeholder pr-1"></div>
+            <h4>Modern Studio</h4>
+            <p>Compact 1-bedroom flat, optimal layout spacing.</p>
+            <span class="template-tag">Preset</span>
+          </div>
+
+          <div class="template-card glass" onclick="projects.createFromTemplate('loft')">
+            <div class="card-img-placeholder pr-2"></div>
+            <h4>Scandinavian Loft</h4>
+            <p>Spacious open-concept design with high windows.</p>
+            <span class="template-tag">Preset</span>
+          </div>
+
+          <div class="template-card glass" onclick="projects.createFromTemplate('villa')">
+            <div class="card-img-placeholder pr-3"></div>
+            <h4>Minimalist Villa</h4>
+            <p>Multi-story luxury residence with swimming pool.</p>
+            <span class="template-tag">Preset</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Saved / Recent Projects List -->
+      <section class="dashboard-section">
+        <h3>Recent Projects</h3>
+        <div id="recent-projects-grid" class="projects-grid">
+          <!-- Dynamically inserted by projects.js -->
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ==========================================
+       STUDIO DESIGNER VIEW
+       ========================================== -->
+  <div id="studio-page" class="view">
+    <!-- Top Toolbar (Figma/Apple inspired glass header) -->
+    <header class="studio-header glass">
+      <div class="logo-container" onclick="app.openDashboard()">
+        <svg class="logo-icon-studio" viewBox="0 0 24 24" width="20" height="20">
+          <path d="M12 2L2 12h3v8h6v-6h2v6h6v-8h3L12 2z" fill="url(#logo-grad)"/>
+        </svg>
+        <span class="logo-text text-sm">Dom IQ <span class="logo-accent">AI</span></span>
+      </div>
+      
+      <!-- Project Name input -->
+      <div class="project-title-editor">
+        <input type="text" id="project-name-input" value="DomIQ AI — AI Home Studio" onchange="projects.saveCurrentName(this.value)">
+        <span class="save-status-indicator">Saved</span>
+      </div>
+
+      <!-- Center Controls: Undo, Redo, Zoom, Grid, Units, 2D/3D Toggle -->
+      <div class="toolbar-center-controls">
+        <div class="segmented-control">
+          <button class="control-segment active" data-tab-switch="floor-planner" onclick="app.selectStudioTabById('floor-planner'); document.querySelectorAll('.control-segment').forEach(b => b.classList.remove('active')); this.classList.add('active');">2D Blueprint</button>
+          <button class="control-segment" data-tab-switch="3d-viewer" onclick="app.selectStudioTabById('3d-viewer'); document.querySelectorAll('.control-segment').forEach(b => b.classList.remove('active')); this.classList.add('active');">Immersive 3D</button>
+        </div>
+
+        <span class="control-divider"></span>
+
+        <!-- History Actions -->
+        <button class="btn btn-secondary btn-icon-sm" onclick="editor.undo()" title="Undo (Ctrl+Z)">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg>
+        </button>
+        <button class="btn btn-secondary btn-icon-sm" onclick="editor.redo()" title="Redo (Ctrl+Y)">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3l3 2.7"/></svg>
+        </button>
+
+        <span class="control-divider"></span>
+
+        <!-- Zoom & Viewport -->
+        <div class="zoom-panel-hud">
+          <button class="btn-zoom-action" onclick="editor.zoomOut()" title="Zoom Out">&minus;</button>
+          <span class="zoom-val-text" id="zoom-indicator">100%</span>
+          <button class="btn-zoom-action" onclick="editor.zoomIn()" title="Zoom In">&plus;</button>
+        </div>
+
+        <span class="control-divider"></span>
+
+        <!-- Snaps Toggle -->
+        <button class="btn btn-secondary btn-icon-sm" id="grid-toggle-btn" onclick="editor.toggleGridSnap()" title="Toggle Grid Snapping" style="color: #06b6d4;">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 3h18v18H3z"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/></svg>
+        </button>
+
+        <span class="control-divider"></span>
+
+        <!-- Units Selector -->
+        <div class="unit-selector-wrapper">
+          <select id="setting-units" onchange="editor.updateSettings()">
+            <option value="meters" selected>Metric (m)</option>
+            <option value="feet">Imperial (ft)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Right Controls: Save, AI Assistant Drawer Toggle, Notification, User Profile -->
+      <div class="studio-controls">
+        <button class="btn btn-secondary" onclick="projects.openVersionHistory()" style="gap: 6px;" title="View project version snapshots">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>Versions</span>
+        </button>
+        <button class="btn btn-secondary" onclick="projects.saveCurrentToBackend()" style="gap: 6px;">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          <span>Save</span>
+        </button>
+        <button class="btn btn-primary btn-glow" onclick="app.toggleAiAssistantDrawer()" style="gap: 6px;">
+          <svg class="ai-sparkle-icon" viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <span>AI</span>
+        </button>
+        <div class="notifications-dropdown-container">
+          <button class="btn btn-secondary btn-icon-sm" onclick="app.toggleNotifications()" title="Notifications">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notification-indicator"></span>
+          </button>
+          <div id="notifications-box" class="dropdown-box glass">
+            <h4>Notifications</h4>
+            <hr class="card-divider">
+            <div class="notification-item">
+              <div class="notification-time">Just now</div>
+              <div class="notification-txt">AI layout calculation completed successfully. Flow index is 96%.</div>
+            </div>
+            <div class="notification-item">
+              <div class="notification-time">10m ago</div>
+              <div class="notification-txt">Workspace backup saved.</div>
+            </div>
+          </div>
+        </div>
+        <div class="user-avatar-badge" onclick="app.openDashboard()">
+          <span>JD</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="studio-layout">
+      <!-- Left Sidebar (Autodesk Forma / Figma inspired toolbar navigator) -->
+      <aside class="studio-sidebar-left glass">
+        <div class="nav-tabs">
+          <div class="sidebar-category-header">CAD Tools</div>
+          <button class="nav-tab active" data-tab="floor-planner" onclick="editor.selectTool('select'); app.selectStudioTab(this); document.querySelectorAll('.control-segment').forEach(b => b.classList.remove('active')); document.querySelector('[data-tab-switch=floor-planner]').classList.add('active');">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 3 10.07 19.97 12.58 12.58 19.97 10.07 3 3"/></svg>
+            <span>Select Tool</span>
+          </button>
+          <button class="nav-tab" onclick="editor.selectTool('wall'); app.selectStudioTabById('floor-planner'); document.querySelectorAll('.control-segment').forEach(b => b.classList.remove('active')); document.querySelector('[data-tab-switch=floor-planner]').classList.add('active');">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="2" x2="8" y2="22"/><line x1="16" y1="2" x2="16" y2="22"/><rect x="8" y="7" width="8" height="2"/><rect x="8" y="15" width="8" height="2"/></svg>
+            <span>Wall Tool</span>
+          </button>
+          <button class="nav-tab" onclick="editor.selectTool('room'); app.selectStudioTabById('floor-planner'); document.querySelectorAll('.control-segment').forEach(b => b.classList.remove('active')); document.querySelector('[data-tab-switch=floor-planner]').classList.add('active');" title="Create enclosed room spaces">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
+            <span>Room Tool</span>
+          </button>
+          <button class="nav-tab" onclick="editor.selectTool('door'); app.selectStudioTabById('floor-planner'); document.querySelectorAll('.control-segment').forEach(b => b.classList.remove('active')); document.querySelector('[data-tab-switch=floor-planner]').classList.add('active');">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span>Door Tool</span>
+          </button>
+          <button class="nav-tab" onclick="editor.selectTool('window'); app.selectStudioTabById('floor-planner'); document.querySelectorAll('.control-segment').forEach(b => b.classList.remove('active')); document.querySelector('[data-tab-switch=floor-planner]').classList.add('active');">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
+            <span>Window Tool</span>
+          </button>
+          <button class="nav-tab" onclick="editor.createItemFromLibrary('staircase'); app.selectStudioTabById('floor-planner'); document.querySelectorAll('.control-segment').forEach(b => b.classList.remove('active')); document.querySelector('[data-tab-switch=floor-planner]').classList.add('active');">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="16" width="6" height="5"/><rect x="9" y="11" width="6" height="10"/><rect x="15" y="6" width="6" height="15"/></svg>
+            <span>Stair Tool</span>
+          </button>
+          
+          <div class="sidebar-category-header" style="margin-top: 12px;">Libraries &amp; AI</div>
+          <button class="nav-tab" data-tab="furniture" onclick="app.selectStudioTab(this)">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 18v3M20 18v3M3 14h18M4 6h16M5 6v8M19 6v8"/></svg>
+            <span>Furniture Library</span>
+          </button>
+          <button class="nav-tab" onclick="editor.createItemFromLibrary('plant'); app.selectStudioTabById('floor-planner'); document.querySelectorAll('.control-segment').forEach(b => b.classList.remove('active')); document.querySelector('[data-tab-switch=floor-planner]').classList.add('active');">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-4-2.1-4-2.1-2 .5-4 2.1S8 13 8 15a7 7 0 0 0 7 7z"/></svg>
+            <span>Plants &amp; Outdoor</span>
+          </button>
+          <button class="nav-tab" onclick="editor.selectTool('select'); app.selectStudioTabById('floor-planner'); document.querySelectorAll('.control-segment').forEach(b => b.classList.remove('active')); document.querySelector('[data-tab-switch=floor-planner]').classList.add('active');" title="Custom light emitters">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+            <span>Lighting Setup</span>
+          </button>
+          <button class="nav-tab" data-tab="settings" onclick="app.selectStudioTab(this)">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            <span>Studio Settings</span>
+          </button>
+          <button class="nav-tab" onclick="app.toggleAiAssistantDrawer()">
+            <svg class="ai-sparkle-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <span>AI Assistant</span>
+          </button>
+
+          <button class="nav-tab" data-tab="cost-estimator" onclick="app.selectStudioTab(this)">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            <span>Cost Estimator</span>
+          </button>
+          <button class="nav-tab" data-tab="exports" onclick="app.selectStudioTab(this)">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Exports Portal</span>
+          </button>
+        </div>
+        <div class="sidebar-bottom-actions">
+          <button class="nav-tab exit-btn" onclick="app.openDashboard()">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            <span>Exit Studio</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Center Workspace Panel -->
+      <section class="studio-center-workspace">
+        
+        <!-- Tab Content: 2D Floor Planner (Editable Canvas) -->
+        <div id="tab-floor-planner" class="studio-tab-content active" style="position: relative;">
+          
+          <!-- Floor Manager Overlay HUD -->
+          <div class="floor-manager-overlay glass">
+            <div class="floor-manager-header">
+              <span class="floor-manager-title">Building Floors</span>
+              <button class="floor-action-btn" onclick="editor.addNewFloor()" title="Add New Floor" style="padding: 2px; border-radius: 4px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);">
+                <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+            </div>
+            <div class="floor-list-container" id="floor-list-container">
+              <!-- Dynamically populated floor items -->
+            </div>
+          </div>
+          
+          <!-- Canvas Overlay Controls HUD -->
+          <div class="canvas-controls-overlay glass">
+            <button class="btn btn-secondary btn-icon-sm" onclick="editor.zoomIn()" title="Zoom In">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+            <span class="hud-zoom-tag" id="zoom-indicator-overlay">Zoom Scale</span>
+            <button class="btn btn-secondary btn-icon-sm" onclick="editor.zoomOut()" title="Zoom Out">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+            <span class="control-divider"></span>
+            <button class="btn btn-secondary btn-icon-sm" onclick="editor.resetViewport()" title="Recenter Viewport">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg>
+            </button>
+          </div>
+
+          <div class="canvas-container">
+            <!-- Infinite grid background configured in style.css -->
+            <canvas id="floor-planner-canvas"></canvas>
+            <div class="interaction-help-overlay">Hold Shift/Middle Mouse to Pan. Scroll to Zoom. Click to edit nodes.</div>
+          </div>
+        </div>
+
+        <!-- Tab Content: 3D Viewer -->
+        <div id="tab-3d-viewer" class="studio-tab-content">
+          <div class="viewer-3d-toolbar glass">
+            <div class="toolbar-group">
+              <button class="btn btn-secondary btn-glow active" id="btn-camera-orbit" onclick="threeViewer.setCameraMode('orbit')">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M12 2v20M2 12h20"/></svg>
+                <span>Orbit View</span>
+              </button>
+              <button class="btn btn-secondary" id="btn-camera-fp" onclick="threeViewer.setCameraMode('firstperson')">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg>
+                <span>Walkthrough (WASD)</span>
+              </button>
+            </div>
+            <span class="control-divider"></span>
+            <div class="toolbar-group">
+              <label class="toggle-container">
+                <span class="toggle-label text-xs">Day / Night</span>
+                <input type="checkbox" id="day-night-toggle" onchange="threeViewer.toggleDayNight(this.checked)">
+                <span class="toggle-slider"></span>
+              </label>
+              <span class="control-divider" style="margin: 0 8px;"></span>
+              <label class="toggle-container">
+                <span class="toggle-label text-xs">Ceiling</span>
+                <input type="checkbox" id="ceiling-toggle" onchange="threeViewer.toggleCeiling(this.checked)">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <span class="control-divider"></span>
+            <div class="toolbar-group">
+              <span class="text-xs text-muted" style="margin-right: 6px;">Floors View:</span>
+              <select id="three-floors-view-mode" onchange="threeViewer.rebuildScene()" style="padding: 4px; border-radius: 4px; background: rgba(15,23,42,0.6); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); font-size: 0.75rem;">
+                <option value="all" selected>Stack All Floors</option>
+                <option value="current">Current Floor Only</option>
+                <option value="transparent">Transparent Upper Floors</option>
+                <option value="exploded">Exploded Building View</option>
+              </select>
+            </div>
+            <span class="control-divider"></span>
+            <div class="toolbar-group">
+              <button class="btn btn-secondary btn-sm" onclick="threeViewer.rebuildScene()" title="Force Scene Refresh">
+                <span>Refresh 3D</span>
+              </button>
+            </div>
+
+          </div>
+          <div id="threejs-container">
+            <!-- ThreeJS WebGL view builds here -->
+          </div>
+          <div class="fp-controls-hint">Use WASD or Arrows to walk. Move mouse to look around. Press ESC to exit.</div>
+        </div>
+
+        <!-- Tab Content: Furniture Panel Overlay -->
+        <div id="tab-furniture" class="studio-tab-content scrollable">
+          <div class="content-header">
+            <h3>Furniture &amp; Fixtures Library</h3>
+            <p>Drag and drop items or click them to place at center of viewport.</p>
+          </div>
+          <div class="search-box-container">
+            <input type="text" placeholder="Search furniture catalog..." id="catalog-search" oninput="editor.filterCatalog(this.value)">
+          </div>
+          <div class="furniture-grid-container">
+            <!-- Living Room -->
+            <div class="furniture-category-section">
+              <h4>Living Room</h4>
+              <div class="library-items-grid">
+                <div class="library-item glass" onclick="editor.createItemFromLibrary('sofa')">
+                  <div class="item-icon-sim sofa-icon"></div>
+                  <span>Lux Sofa</span>
+                </div>
+                <div class="library-item glass" onclick="editor.createItemFromLibrary('chair')">
+                  <div class="item-icon-sim chair-icon"></div>
+                  <span>Lounge Chair</span>
+                </div>
+                <div class="library-item glass" onclick="editor.createItemFromLibrary('table_coffee')">
+                  <div class="item-icon-sim table-coffee-icon"></div>
+                  <span>Coffee Table</span>
+                </div>
+                <div class="library-item glass" onclick="editor.createItemFromLibrary('tv_stand')">
+                  <div class="item-icon-sim tv-stand-icon"></div>
+                  <span>Media Console</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bedroom -->
+            <div class="furniture-category-section">
+              <h4>Bedroom</h4>
+              <div class="library-items-grid">
+                <div class="library-item glass" onclick="editor.createItemFromLibrary('bed_double')">
+                  <div class="item-icon-sim bed-icon"></div>
+                  <span>Queen Bed</span>
+                </div>
+                <div class="library-item glass" onclick="editor.createItemFromLibrary('wardrobe')">
+                  <div class="item-icon-sim wardrobe-icon"></div>
+                  <span>Wardrobe</span>
+                </div>
+                <div class="library-item glass" onclick="editor.createItemFromLibrary('nightstand')">
+                  <div class="item-icon-sim nightstand-icon"></div>
+                  <span>Nightstand</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Kitchen -->
+            <div class="furniture-category-section">
+              <h4>Kitchen</h4>
+              <div class="library-items-grid">
+                <div class="library-item glass" onclick="editor.createItemFromLibrary('dining_table')">
+                  <div class="item-icon-sim dining-table-icon"></div>
+                  <span>Dining Set</span>
+                </div>
+                <div class="library-item glass" onclick="editor.createItemFromLibrary('kitchen_island')">
+                  <div class="item-icon-sim kitchen-island-icon"></div>
+                  <span>Island Counter</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bathroom -->
+            <div class="furniture-category-section">
+              <h4>Bathroom</h4>
+              <div class="library-items-grid">
+                <div class="library-item glass" onclick="editor.createItemFromLibrary('bath_tub')">
+                  <div class="item-icon-sim bathtub-icon"></div>
+                  <span>Lux Tub</span>
+                </div>
+                <div class="library-item glass" onclick="editor.createItemFromLibrary('wash_basin')">
+                  <div class="item-icon-sim basin-icon"></div>
+                  <span>Wash Basin</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Office -->
+            <div class="furniture-category-section">
+              <h4>Office</h4>
+              <div class="library-items-grid">
+                <div class="library-item glass" onclick="editor.createItemFromLibrary('desk')">
+                  <div class="item-icon-sim desk-icon"></div>
+                  <span>Work Desk</span>
+                </div>
+                <div class="library-item glass" onclick="editor.createItemFromLibrary('office_chair')">
+                  <div class="item-icon-sim chair-icon"></div>
+                  <span>Office Chair</span>
+                </div>
+                <div class="library-item glass" onclick="editor.createItemFromLibrary('bookshelf')">
+                  <div class="item-icon-sim bookshelf-icon"></div>
+                  <span>Bookshelf</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Outdoor -->
+            <div class="furniture-category-section">
+              <h4>Outdoor</h4>
+              <div class="library-items-grid">
+                <div class="library-item glass" onclick="editor.createItemFromLibrary('pool')">
+                  <div class="item-icon-sim pool-icon"></div>
+                  <span>Pool (Large)</span>
+                </div>
+                <div class="library-item glass" onclick="editor.createItemFromLibrary('staircase')">
+                  <div class="item-icon-sim staircase-icon"></div>
+                  <span>Spiral Stairs</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Decor -->
+            <div class="furniture-category-section">
+              <h4>Decor</h4>
+              <div class="library-items-grid">
+                <div class="library-item glass" onclick="editor.createItemFromLibrary('decor_tv')">
+                  <div class="item-icon-sim tv-icon"></div>
+                  <span>Flat TV</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Plants -->
+            <div class="furniture-category-section">
+              <h4>Plants</h4>
+              <div class="library-items-grid">
+                <div class="library-item glass" onclick="editor.createItemFromLibrary('plant')">
+                  <div class="item-icon-sim plant-icon"></div>
+                  <span>Potted Plant</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Lighting -->
+            <div class="furniture-category-section">
+              <h4>Lighting</h4>
+              <div class="library-items-grid">
+                <div class="library-item glass" onclick="editor.createItemFromLibrary('lamp_floor')">
+                  <div class="item-icon-sim lamp-icon"></div>
+                  <span>Floor Lamp</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab Content: Cost Estimator -->
+        <div id="tab-cost-estimator" class="studio-tab-content scrollable">
+          <div class="content-header">
+            <h3>Dom IQ Smart Cost Estimator</h3>
+            <p>Real-time automated bill of materials and building quote analysis powered by DomIQ AI model metrics.</p>
+          </div>
+          <div id="cost-estimator-container">
+            <!-- Cost items inserted dynamically by ai.js -->
+          </div>
+        </div>
+
+        <!-- Tab Content: Exports -->
+        <div id="tab-exports" class="studio-tab-content scrollable">
+          <div class="content-header">
+            <h3>Production-Grade Design Export</h3>
+            <p>Export your floor plan, blueprints, cost estimates, or 3D representations in premium formats.</p>
+          </div>
+          <div class="exports-grid">
+            <div class="export-card glass" onclick="app.triggerExport('pdf')">
+              <div class="export-icon pdf">PDF</div>
+              <h4>Project Design Dossier (PDF)</h4>
+              <p>Complete project breakdown report, localized material quotes, and high-fidelity 2D blueprints.</p>
+              <button class="btn btn-secondary">Generate PDF</button>
+            </div>
+            <div class="export-card glass" onclick="app.triggerExport('png')">
+              <div class="export-icon png">PNG</div>
+              <h4>High-Resolution Capture (PNG)</h4>
+              <p>Download the current viewport coordinates as an transparent ultra-sharp PNG architectural schematic.</p>
+              <button class="btn btn-secondary">Export PNG</button>
+            </div>
+            <div class="export-card glass" onclick="app.triggerExport('json')">
+              <div class="export-icon json">JSON</div>
+              <h4>Dom IQ 3D Model (JSON Schema)</h4>
+              <p>Download structured standard JSON object coordinate array, compatible with Dom IQ loaders and web builders.</p>
+              <button class="btn btn-secondary">Download Schema</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab Content: Settings / Materials Editor -->
+        <div id="tab-settings" class="studio-tab-content scrollable">
+          <div class="content-header">
+            <h3>Studio Configurations</h3>
+            <p>Alter project defaults, unit constraints, snapping settings, and default materials.</p>
+          </div>
+          <div class="settings-form-layout glass">
+            <div class="form-group">
+              <label>Default Wall Height (m)</label>
+              <input type="number" id="setting-wall-height" value="2.8" step="0.1" onchange="editor.updateSettings()">
+            </div>
+            <div class="form-group">
+              <label>Default Wall Thickness (cm)</label>
+              <input type="number" id="setting-wall-thickness" value="20" step="5" onchange="editor.updateSettings()">
+            </div>
+            <div class="form-group">
+              <label>Grid Snap Resolution (cm)</label>
+              <select id="setting-snap" onchange="editor.updateSettings()">
+                <option value="10" selected>10 cm</option>
+                <option value="25">25 cm</option>
+                <option value="50">50 cm</option>
+                <option value="0">Off (Free movement)</option>
+              </select>
+
+            
+            <hr class="card-divider">
+            
+            <div class="settings-materials-library">
+              <h4 style="margin-bottom: 8px; font-weight: 600; color: #f8fafc;">Global Material Library</h4>
+              <p class="text-xs text-muted" style="margin-bottom: 16px;">Specify PBR finishes for the building envelope. Reflects instantly in 3D.</p>
+              
+              <div class="form-group" style="margin-bottom: 12px;">
+                <label>Walls Finish</label>
+                <select id="material-walls" onchange="editor.updateGlobalMaterials()" style="width: 100%; padding: 6px; border-radius: 4px; background: #0f172a; color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1);">
+                  <option value="white_paint" selected>White Paint</option>
+                  <option value="concrete">Concrete</option>
+                  <option value="brick">Brick</option>
+                </select>
+              </div>
+              
+              <div class="form-group" style="margin-bottom: 12px;">
+                <label>Floors Finish</label>
+                <select id="material-floors" onchange="editor.updateGlobalMaterials()" style="width: 100%; padding: 6px; border-radius: 4px; background: #0f172a; color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1);">
+                  <option value="oak_wood" selected>Oak Wood</option>
+                  <option value="walnut_wood">Walnut</option>
+                  <option value="marble">Marble</option>
+                  <option value="tile">Ceramic Tile</option>
+                </select>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 16px;">
+                <label>Doors / Frames Finish</label>
+                <select id="material-doors" onchange="editor.updateGlobalMaterials()" style="width: 100%; padding: 6px; border-radius: 4px; background: #0f172a; color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1);">
+                  <option value="oak" selected>Oak</option>
+                  <option value="walnut">Walnut</option>
+                </select>
+              </div>
+            </div>
+
+            <hr class="card-divider">
+            <button class="btn btn-secondary btn-full" onclick="projects.clearCache()" style="color: #ef4444; border-color: rgba(239,68,68,0.2);">Clear Saved Projects Cache</button>
+          </div>
+        </div>
+
+        <!-- Bottom Quick-Access Action Toolbar (Floating Apple-like dock layout) -->
+        <div class="bottom-toolbar glass">
+          <button class="toolbar-tool active" id="tool-select" onclick="editor.selectTool('select')" title="Select &amp; Modify (V)">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="3 3 10.07 19.97 12.58 12.58 19.97 10.07 3 3"/></svg>
+            <span>Select</span>
+          </button>
+          <button class="toolbar-tool" id="tool-wall" onclick="editor.selectTool('wall')" title="Wall Tool (W) - Draw walls continuously">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="8" y1="2" x2="8" y2="22"/><line x1="16" y1="2" x2="16" y2="22"/><rect x="8" y="7" width="8" height="2"/><rect x="8" y="15" width="8" height="2"/></svg>
+            <span>Wall</span>
+          </button>
+          <button class="toolbar-tool" id="tool-door" onclick="editor.selectTool('door')" title="Door Insertion Tool (D)">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span>Door</span>
+          </button>
+          <button class="toolbar-tool" id="tool-window" onclick="editor.selectTool('window')" title="Window Insertion Tool">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
+            <span>Window</span>
+          </button>
+          <button class="toolbar-tool" id="tool-measure" onclick="editor.selectTool('measure')" title="Measure Distance">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="9" x2="10" y2="15"/><line x1="14" y1="9" x2="14" y2="15"/></svg>
+            <span>Measure</span>
+          </button>
+          <button class="toolbar-tool" onclick="app.selectStudioTabById('furniture')" title="Open Furniture Catalog">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 18v3M20 18v3M3 14h18M4 6h16M5 6v8M19 6v8"/></svg>
+            <span>Furniture</span>
+          </button>
+          <button class="toolbar-tool" onclick="app.toggleAiAssistantDrawer()" title="Launch Assistant Chat">
+            <svg class="ai-sparkle-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <span>AI Assist</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Right Panel: Properties Inspector (Apple/Figma styled layout wrapper) -->
+      <aside class="studio-sidebar-right glass" id="properties-panel">
+        <div class="panel-section">
+          <h3>Properties</h3>
+          <p class="text-xs text-muted" id="properties-type-label">No element selected</p>
+        </div>
+
+        <hr class="card-divider">
+
+        <div id="inspector-content">
+          <!-- Populated dynamically by editor.js. Styled cleanly in style.css. -->
+          <div class="empty-properties-message text-center">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <p>Select a wall, door, window, or furniture item on the canvas to inspect and edit details.</p>
+          </div>
+        </div>
+      </aside>
+
+
+    </div>
+
+    <!-- AI Assistant Drawer Panel -->
+    <aside class="ai-assistant-drawer glass" id="ai-assistant-drawer">
+      <div class="ai-drawer-header">
+        <div class="ai-header-left">
+          <svg class="ai-sparkle-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <h3>Dom IQ Generative AI</h3>
+        </div>
+        <button class="btn-close-drawer" onclick="app.toggleAiAssistantDrawer()">&times;</button>
+      </div>
+
+      <div class="ai-drawer-body">
+        <div class="ai-style-selector-section">
+          <h4>Neural Rendering Design Style</h4>
+          <p class="text-xs text-muted">Generate a mockup rendering or alter 3D materials based on a style preset:</p>
+          <div class="style-options-grid">
+            <button class="style-btn active" onclick="ai.setDesignStyle('modern', this)">
+              <span class="style-dot modern"></span>
+              <span>Modern Luxe</span>
+            </button>
+            <button class="style-btn" onclick="ai.setDesignStyle('scandinavian', this)">
+              <span class="style-dot scandinavian"></span>
+              <span>Nordic Cozy</span>
+            </button>
+            <button class="style-btn" onclick="ai.setDesignStyle('minimalist', this)">
+              <span class="style-dot minimalist"></span>
+              <span>Minimal</span>
+            </button>
+            <button class="style-btn" onclick="ai.setDesignStyle('japanese', this)">
+              <span class="style-dot japanese"></span>
+              <span>Japandi</span>
+            </button>
+            <button class="style-btn" onclick="ai.setDesignStyle('industrial', this)">
+              <span class="style-dot industrial"></span>
+              <span>Industrial</span>
+            </button>
+            <button class="style-btn" onclick="ai.setDesignStyle('luxury', this)">
+              <span class="style-dot luxury"></span>
+              <span>Ultra Luxury</span>
+            </button>
+          </div>
+          
+          <div class="render-controls" style="margin-top: 12px; display: flex; gap: 8px;">
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 4px; text-align: left;">
+              <label style="font-size: 0.65rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Camera View</label>
+              <select id="render-camera" style="width: 100%; padding: 6px; font-size: 0.72rem; background: rgba(15, 23, 42, 0.4); color: var(--text-normal); border: 1px solid var(--border-color); border-radius: var(--radius-sm); outline: none;">
+                <option value="Corner view">Corner View</option>
+                <option value="Top view">Top View</option>
+                <option value="Eye level">Eye Level</option>
+                <option value="Isometric">Isometric</option>
+                <option value="Wide angle">Wide Angle</option>
+                <option value="First person">First Person</option>
+              </select>
+            </div>
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 4px; text-align: left;">
+              <label style="font-size: 0.65rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Room Area</label>
+              <select id="render-room-type" style="width: 100%; padding: 6px; font-size: 0.72rem; background: rgba(15, 23, 42, 0.4); color: var(--text-normal); border: 1px solid var(--border-color); border-radius: var(--radius-sm); outline: none;">
+                <option value="Auto">Auto (Detect)</option>
+                <option value="Living Room">Living Room</option>
+                <option value="Bedroom">Bedroom</option>
+                <option value="Kitchen">Kitchen</option>
+                <option value="Bathroom">Bathroom</option>
+                <option value="Dining Room">Dining Room</option>
+                <option value="Entire house">Entire House</option>
+                <option value="Office">Office</option>
+                <option value="Cafe">Cafe</option>
+                <option value="Villa">Villa</option>
+                <option value="Apartment">Apartment</option>
+                <option value="Garden">Garden</option>
+                <option value="Terrace">Terrace</option>
+              </select>
+            </div>
+          </div>
+          
+
+          <button class="btn btn-primary btn-glow btn-full" style="margin-top: 12px;" onclick="ai.generateRenderingMockup()">
+            <svg class="ai-sparkle-icon" viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <span>Generate Photorealistic Mockup</span>
+          </button>
+          
+          <hr class="card-divider" style="margin: 16px 0;">
+          
+          <h4>Design Assistant Chat</h4>
+          <p class="text-xs text-muted" style="margin-bottom: 8px;">Ask the AI to furnish the room or make layout changes:</p>
+          
+          <div id="ai-chat-log" style="max-height: 200px; overflow-y: auto; background: rgba(0,0,0,0.2); border-radius: var(--radius-sm); padding: 8px; margin-bottom: 8px; font-size: 0.75rem; border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 8px;">
+            <div class="ai-message assistant">
+              <p>Hello! I can help you layout and furnish this space. Try asking me to "furnish the room".</p>
+            </div>
+          </div>
+          
+          <div style="display: flex; gap: 6px;">
+            <input type="text" id="ai-chat-input" placeholder="E.g., furnish this room with modern furniture..." style="flex: 1; padding: 8px; background: rgba(15, 23, 42, 0.4); border: 1px solid var(--border-color); color: var(--text-normal); border-radius: var(--radius-sm); font-size: 0.75rem; outline: none;" onkeypress="if(event.key === 'Enter') ai.sendMessage()">
+            <button id="ai-chat-send" class="btn btn-primary" onclick="ai.sendMessage()" style="padding: 0 12px; border-radius: var(--radius-sm);">Send</button>
+          </div>
+
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Auth Sign In / Sign Up Modal - Cyberpunk & Hyper-Modern Aesthetics -->
+  <div id="auth-modal" class="modal-overlay funky-modal-overlay">
+    <div class="funky-auth-card glass">
+      <!-- Background Ambient Glow Blobs -->
+      <div class="funky-bg-glow glow-blue"></div>
+      <div class="funky-bg-glow glow-magenta"></div>
+      <div class="funky-bg-glow glow-cyan"></div>
+      
+      <!-- Close Button -->
+      <button class="funky-modal-close" onclick="auth.closeModal()">&times;</button>
+      
+      <!-- Left Column / Hero Display (from reference photos) -->
+      <div class="funky-auth-sidebar">
+        <div class="funky-brand-badge">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L2 12h3v8h6v-6h2v6h6v-8h3L12 2z" fill="url(#logo-grad)"/>
+          </svg>
+          <span>INTERIOR AI // 2026</span>
+        </div>
+
+        <div class="funky-typography-container">
+          <h2 class="funky-title-solid" id="funky-hero-top">ENGINE</h2>
+          <h2 class="funky-title-stroke" id="funky-hero-bottom">FEATURES</h2>
+          <span class="funky-subbadge" id="funky-hero-tag">SYSTEM READY</span>
+        </div>
+
+        <p class="funky-sidebar-desc" id="funky-hero-desc">
+          Everything you need to turn empty spaces into architectural masterpieces using our proprietary AI models.
+        </p>
+
+        <!-- Feature Pills Stack (Image 1 reference) -->
+        <div class="funky-feature-stack">
+          <div class="funky-pill-card active">
+            <span class="funky-pill-num">01</span>
+            <span class="funky-pill-text">AI DETECTION</span>
+          </div>
+          <div class="funky-pill-card">
+            <span class="funky-pill-num">02</span>
+            <span class="funky-pill-text">SPATIAL FLOW</span>
+          </div>
+          <div class="funky-pill-card">
+            <span class="funky-pill-num">03</span>
+            <span class="funky-pill-text">LIGHTING SYNC</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column / Form Body -->
+      <div class="funky-auth-main">
+        <!-- Floating Pill Tabs (Reference Style) -->
+        <div class="funky-tabs-row">
+          <button id="auth-tab-login" class="funky-tab-btn active" onclick="auth.switchTab('login')">
+            <span>SIGN IN</span>
+          </button>
+          <button id="auth-tab-signup" class="funky-tab-btn" onclick="auth.switchTab('signup')">
+            <span>JOIN NOW</span>
+          </button>
+          <button id="auth-tab-forgot" class="funky-tab-btn" onclick="auth.switchTab('forgot')">
+            <span>RECOVER</span>
+          </button>
+        </div>
+
+        <h3 id="auth-modal-title" class="funky-form-title">AUTHENTICATION REQUIRED</h3>
+
+        <!-- Alert Messages -->
+        <div id="auth-error-msg" class="funky-alert alert-error" style="display: none;"></div>
+        <div id="auth-success-msg" class="funky-alert alert-success" style="display: none;"></div>
+
+        <!-- Sign In Form -->
+        <form id="auth-form-login" onsubmit="auth.handleLoginSubmit(event)" class="funky-form">
+          <div class="funky-input-group">
+            <label class="funky-input-label"><span class="label-idx">01</span> EMAIL ADDRESS</label>
+            <div class="funky-input-wrapper">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <input type="email" id="auth-login-email" placeholder="name@domain.com" required>
+            </div>
+          </div>
+          <div class="funky-input-group">
+            <label class="funky-input-label"><span class="label-idx">02</span> PASSWORD</label>
+            <div class="funky-input-wrapper">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <input type="password" id="auth-login-password" placeholder="••••••••••••" required>
+            </div>
+          </div>
+          <div class="funky-form-row">
+            <label class="funky-checkbox-label">
+              <input type="checkbox" id="auth-login-remember" checked>
+              <span>REMEMBER ME</span>
+            </label>
+            <a href="#" onclick="auth.switchTab('forgot'); return false;" class="funky-link">FORGOT KEY?</a>
+          </div>
+          <button type="submit" id="btn-auth-login-submit" class="funky-btn-submit">
+            <span>LET'S GO</span>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </form>
+
+        <!-- Sign Up Form -->
+        <form id="auth-form-signup" onsubmit="auth.handleSignupSubmit(event)" class="funky-form" style="display: none;">
+          <div class="funky-input-group">
+            <label class="funky-input-label"><span class="label-idx">01</span> FULL NAME</label>
+            <div class="funky-input-wrapper">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <input type="text" id="auth-signup-fullname" placeholder="John Doe" required>
+            </div>
+          </div>
+          <div class="funky-input-group">
+            <label class="funky-input-label"><span class="label-idx">02</span> EMAIL ADDRESS</label>
+            <div class="funky-input-wrapper">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <input type="email" id="auth-signup-email" placeholder="name@domain.com" required>
+            </div>
+          </div>
+          <div class="funky-input-group">
+            <label class="funky-input-label"><span class="label-idx">03</span> PASSWORD</label>
+            <div class="funky-input-wrapper">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <input type="password" id="auth-signup-password" placeholder="Min 8 characters" required minlength="8">
+            </div>
+          </div>
+          <div class="funky-input-group">
+            <label class="funky-input-label"><span class="label-idx">04</span> CONFIRM PASSWORD</label>
+            <div class="funky-input-wrapper">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <input type="password" id="auth-signup-confirm" placeholder="Repeat password" required minlength="8">
+            </div>
+          </div>
+          <button type="submit" id="btn-auth-signup-submit" class="funky-btn-submit">
+            <span>CREATE ACCOUNT</span>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </form>
+
+        <!-- Forgot Password Form -->
+        <form id="auth-form-forgot" onsubmit="auth.handleForgotSubmit(event)" class="funky-form" style="display: none;">
+          <p class="funky-form-note">Enter your email address to receive a single-use access code.</p>
+          <div class="funky-input-group">
+            <label class="funky-input-label"><span class="label-idx">01</span> ACCOUNT EMAIL</label>
+            <div class="funky-input-wrapper">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <input type="email" id="auth-forgot-email" placeholder="name@domain.com" required>
+            </div>
+          </div>
+          <button type="submit" class="funky-btn-submit">
+            <span>SEND RESET TOKEN</span>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </form>
+
+        <!-- Reset Password Form -->
+        <form id="auth-form-reset" onsubmit="auth.handleResetSubmit(event)" class="funky-form" style="display: none;">
+          <div class="funky-input-group">
+            <label class="funky-input-label"><span class="label-idx">01</span> RESET TOKEN</label>
+            <div class="funky-input-wrapper">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+              <input type="text" id="auth-reset-token" placeholder="Paste reset token" required>
+            </div>
+          </div>
+          <div class="funky-input-group">
+            <label class="funky-input-label"><span class="label-idx">02</span> NEW PASSWORD</label>
+            <div class="funky-input-wrapper">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <input type="password" id="auth-reset-password" placeholder="Enter new password" required minlength="8">
+            </div>
+          </div>
+          <div class="funky-input-group">
+            <label class="funky-input-label"><span class="label-idx">03</span> CONFIRM PASSWORD</label>
+            <div class="funky-input-wrapper">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <input type="password" id="auth-reset-confirm" placeholder="Confirm new password" required minlength="8">
+            </div>
+          </div>
+          <button type="submit" class="funky-btn-submit">
+            <span>UPDATE PASSWORD</span>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- User Profile Dropdown Menu -->
+  <div id="user-profile-dropdown" class="user-profile-dropdown">
+    <div class="user-dropdown-header">
+      <div id="profile-dropdown-name" class="user-dropdown-name">John Doe</div>
+      <div id="profile-dropdown-email" class="user-dropdown-email">user@example.com</div>
+    </div>
+    <div class="user-dropdown-actions">
+      <button class="user-dropdown-btn danger" onclick="auth.logout()">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        <span>Log Out</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Simulated Video Demo Overlay (Microinteraction) -->
+  <div id="video-demo-modal" class="modal-overlay">
+    <div class="modal-content glass">
+      <div class="modal-header">
+        <h3>DomIQ AI Walkthrough</h3>
+        <button class="modal-close" onclick="app.closeVideoDemo()">&times;</button>
+      </div>
+      <div class="modal-body-content">
+        <!-- Interactive simulator or detailed instructions inside -->
+        <div style="padding: 20px; text-align: center;">
+          <p style="color: #06b6d4; font-size: 1.1rem; margin-bottom: 12px; font-weight: 600;">Welcome to DomIQ AI Interactive Demo</p>
+          <p style="margin-bottom: 24px; font-size: 0.9rem; color: #94a3b8; max-width: 500px; margin-left: auto; margin-right: auto;">
+            This system runs entirely in your web browser. You can click <strong>Start Designing</strong> to explore the full dashboard, load real presets, draw walls, insert doors/windows, toggle Day/Night lighting, and inspect properties.
+          </p>
+          <button class="btn btn-primary btn-glow" onclick="app.closeVideoDemo(); app.openDashboard();" style="margin: 0 auto;">Start Designing Now</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main scripts -->
+  <script type="module" src="/auth.js"></script>
+  <script type="module" src="/projects.js"></script>
+  <script type="module" src="/editor.js"></script>
+  <script type="module" src="/three-viewer.js"></script>
+  <script type="module" src="/ai2.js"></script>
+  <script type="module" src="/ai-room-generator.js"></script>
+  <script type="module" src="/ai-executor.js"></script>
+  <script type="module" src="/ai-validator.js"></script>
+  <script type="module" src="/ai-refinement.js"></script>
+
+  <script type="module" src="/landing/src/main.jsx"></script>
+  <script type="module" src="/router.js"></script>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
