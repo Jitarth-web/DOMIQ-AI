@@ -414,6 +414,7 @@ const editor = {
 
   // Tools Controller
   selectTool: function(toolName) {
+    if (window.app) window.app.closeMobileSidebar();
     this.activeTool = toolName;
     this.isDrawingWall = false;
     this.isDrawingRoom = false;
@@ -879,6 +880,7 @@ const editor = {
 
   // Library Items catalog placements
   createItemFromLibrary: function(type) {
+    if (window.app) window.app.closeMobileSidebar();
     this.pushStateToUndo();
     
     // Create element offset in middle viewport

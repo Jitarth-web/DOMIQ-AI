@@ -76,3 +76,12 @@ html.lenis, html.lenis body {
 .lenis.lenis-scrolling iframe {
   pointer-events: none;
 }
+
+@media (max-width: 768px) {
+  body {
+    cursor: default !important;
+  }
+  .custom-cursor, .custom-cursor-dot {
+    display: none !important;
+  }
+}

@@ -30,15 +30,15 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-[100] w-[95%] max-w-6xl flex items-center justify-between px-6 py-2 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-full shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+    <nav className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-[100] w-[95%] max-w-6xl flex items-center justify-between px-4 md:px-6 py-2 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-full shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
 
       {/* Brand & Logo */}
       <div
-        className="flex items-center gap-3 cursor-pointer group"
+        className="flex items-center gap-2 md:gap-3 cursor-pointer group"
         onMouseEnter={handleLogoHover}
         onMouseLeave={handleLogoLeave}
       >
-        <svg ref={logoRef} width="28" height="28" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="transition-transform origin-center">
+        <svg ref={logoRef} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 md:w-7 md:h-7 transition-transform origin-center">
           {/* House Outline */}
           <path d="M10 55L50 20L90 55V85H10V55Z" stroke="white" strokeWidth="3" strokeLinejoin="round" />
           {/* Circuit / Blueprint Node */}
@@ -47,8 +47,8 @@ const Navbar = () => {
           <path d="M42 55H30" stroke="#60a5fa" strokeWidth="3" />
           <path d="M58 55H70" stroke="#60a5fa" strokeWidth="3" />
         </svg>
-        <div ref={textRef} className="flex items-center text-lg tracking-widest uppercase text-white drop-shadow-md">
-          <div className="font-light mr-2 flex">
+        <div ref={textRef} className="flex items-center text-sm md:text-lg tracking-widest uppercase text-white drop-shadow-md">
+          <div className="font-light mr-1 md:mr-2 flex">
             {'DOMIQ'.split('').map((char, i) => <span key={i} className="inline-block">{char}</span>)}
           </div>
           <div className="font-black text-blue-400 flex">
@@ -67,11 +67,11 @@ const Navbar = () => {
             window.auth.openModal('login');
           }
         }}
-        className="px-5 py-2.5 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-sm tracking-widest uppercase shadow-[0_0_15px_rgba(79,70,229,0.3)] hover:shadow-[0_0_25px_rgba(79,70,229,0.8)] hover:scale-105 transition-all duration-300 relative overflow-hidden group"
+        className="px-3 md:px-5 py-1.5 md:py-2.5 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-xs md:text-sm tracking-widest uppercase shadow-[0_0_15px_rgba(79,70,229,0.3)] hover:shadow-[0_0_25px_rgba(79,70,229,0.8)] hover:scale-105 transition-all duration-300 relative overflow-hidden group"
       >
         <span className="relative z-10 flex items-center gap-2">
           Start Designing
-          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+          <ArrowRight className="w-3.5 h-3.5 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform duration-300" />
         </span>
         {/* Shine Animation */}
         <div className="absolute top-0 -left-[100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-12 group-hover:animate-[shimmer_1s_forwards]"></div>

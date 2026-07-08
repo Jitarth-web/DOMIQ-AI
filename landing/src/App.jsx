@@ -153,7 +153,7 @@ function App() {
         ].map((Component, i) => (
           <div
             key={i}
-            className={`stacked-card sticky h-[92vh] w-[98vw] rounded-[40px] md:rounded-[60px] overflow-hidden shadow-[0_-20px_60px_rgba(0,0,0,0.6)] ${i !== 7 ? 'mb-[150px]' : ''}`}
+            className={`stacked-card sticky h-[92vh] max-md:h-auto max-md:min-h-[85vh] max-md:py-8 w-[98vw] rounded-[40px] md:rounded-[60px] overflow-hidden shadow-[0_-20px_60px_rgba(0,0,0,0.6)] ${i !== 7 ? 'mb-[150px] max-md:mb-[60px]' : ''}`}
             style={{
               top: '100px',
               zIndex: i + 1,

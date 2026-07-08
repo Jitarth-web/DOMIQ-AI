@@ -96,10 +96,10 @@ export const CustomCursor = () => {
 
   return createPortal(
     <>
-      <div ref={cursorRef} style={cursorStyle}>
+      <div ref={cursorRef} className="custom-cursor" style={cursorStyle}>
         <span style={textStyle}>{text}</span>
       </div>
-      <div ref={dotRef} style={dotStyle}></div>
+      <div ref={dotRef} className="custom-cursor-dot" style={dotStyle}></div>
     </>,
     document.body
   );

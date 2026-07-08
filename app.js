@@ -1776,6 +1776,7 @@ const app = {
   },
 
   selectStudioTabById: function (tabId) {
+    this.closeMobileSidebar();
     // Deactivate old buttons
     document.querySelectorAll(".nav-tab").forEach(b => b.classList.remove("active"));
 
@@ -1928,6 +1929,21 @@ const app = {
       const file = new Blob([payload], { type: "application/json" });
       link.href = URL.createObjectURL(file);
       link.click();
+    }
+  },
+
+  // Toggle left sidebar on mobile
+  toggleMobileSidebar: function () {
+    const sidebar = document.querySelector(".studio-sidebar-left");
+    if (sidebar) {
+      sidebar.classList.toggle("mobile-open");
+    }
+  },
+
+  closeMobileSidebar: function () {
+    const sidebar = document.querySelector(".studio-sidebar-left");
+    if (sidebar && sidebar.classList.contains("mobile-open")) {
+      sidebar.classList.remove("mobile-open");
     }
   }
 };

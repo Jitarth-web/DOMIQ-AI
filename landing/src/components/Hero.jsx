@@ -25,19 +25,19 @@ const Hero = () => {
   }, []);
 
   return (
-    <div ref={containerRef} className="w-full h-full bg-hero relative overflow-hidden">
+    <div ref={containerRef} className="w-full h-full max-md:h-auto bg-hero relative overflow-hidden max-md:flex max-md:flex-col max-md:justify-start max-md:py-16 max-md:px-4">
       <div className="absolute inset-0 bg-[#0A0A0A] z-0"></div>
 
       {/* Huge Background Number */}
-      <div className="absolute -right-[10%] top-1/2 -translate-y-1/2 text-[400px] font-black text-white/[0.03] select-none pointer-events-none z-0">
+      <div className="absolute -right-[10%] top-1/2 -translate-y-1/2 text-[400px] font-black text-white/[0.03] select-none pointer-events-none z-0 max-md:hidden">
         01
       </div>
 
-      <FunkyLabel xOffset={50} yOffset={100}>AI READY</FunkyLabel>
-      <FunkyLabel className="right-20 top-40 bg-blue-600/20 text-blue-300 border-blue-500/30">V. 2.4.0</FunkyLabel>
+      <FunkyLabel xOffset={50} yOffset={100} className="max-md:hidden">AI READY</FunkyLabel>
+      <FunkyLabel className="right-20 top-40 bg-blue-600/20 text-blue-300 border-blue-500/30 max-md:hidden">V. 2.4.0</FunkyLabel>
 
       {/* Background Video & Cinematic Gradient */}
-      <div className="absolute top-[5%] left-[50%] w-[45%] h-[85%] rounded-[40px] overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.8)] z-1">
+      <div className="absolute max-md:relative max-md:top-auto max-md:left-auto max-md:w-full max-md:h-[250px] max-md:mt-8 max-md:order-2 top-[5%] left-[50%] w-[45%] h-[85%] rounded-[40px] overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.8)] z-1">
         <video
           ref={imageRef}
           src={homeVideo}
@@ -53,35 +53,35 @@ const Hero = () => {
       </div>
 
       {/* Decorative Crosses */}
-      <div className="absolute left-[10%] top-[20%] text-white/20 text-xs tracking-[1em]">+++</div>
-      <div className="absolute left-[10%] bottom-[20%] text-white/20 text-xs tracking-[1em]">+++</div>
+      <div className="absolute left-[10%] top-[20%] text-white/20 text-xs tracking-[1em] max-md:hidden">+++</div>
+      <div className="absolute left-[10%] bottom-[20%] text-white/20 text-xs tracking-[1em] max-md:hidden">+++</div>
 
-      <div ref={textRef} className="absolute left-[5%] top-[25%] z-10 w-[70%]">
-        <h1 className="text-[140px] font-black leading-[0.85] tracking-tight uppercase">
-          <div className="overflow-hidden pb-8 pt-4 -mt-4"><div className="animate-text-reveal">Design</div></div>
-          <div className="overflow-hidden pb-8 pt-4 -mt-4"><div className="animate-text-reveal flex items-center gap-8">
+      <div ref={textRef} className="absolute max-md:relative max-md:top-auto max-md:left-auto max-md:w-full left-[5%] top-[25%] z-10 w-[70%] max-md:px-4 max-md:order-1 max-md:mt-4">
+        <h1 className="text-4xl sm:text-6xl md:text-[140px] font-black leading-[0.85] tracking-tight uppercase max-md:text-center">
+          <div className="overflow-hidden pb-2 md:pb-8 pt-2 md:pt-4 -mt-2 md:-mt-4"><div className="animate-text-reveal">Design</div></div>
+          <div className="overflow-hidden pb-2 md:pb-8 pt-2 md:pt-4 -mt-2 md:-mt-4"><div className="animate-text-reveal flex items-center justify-center md:justify-start gap-8">
             Your
             <div className="h-[2px] w-[200px] bg-white/30 hidden md:block"></div>
           </div></div>
-          <div className="overflow-hidden flex items-baseline pb-8 pt-4 -mt-4">
-            <div className="animate-text-reveal italic text-transparent [-webkit-text-stroke:2px_white] rotate-[-2deg] mr-8 pr-4">Dream</div>
+          <div className="overflow-hidden flex items-baseline justify-center md:justify-start pb-2 md:pb-8 pt-2 md:pt-4 -mt-2 md:-mt-4">
+            <div className="animate-text-reveal italic text-transparent [-webkit-text-stroke:1px_white] md:[-webkit-text-stroke:2px_white] rotate-[-2deg] mr-4 md:mr-8 pr-2 md:pr-4">Dream</div>
             <div className="animate-text-reveal">Home</div>
           </div>
         </h1>
 
-        <p className="text-2xl text-white/60 font-medium mt-12 max-w-xl pl-2 border-l-2 border-white/20 animate-fade-in-up" style={{ animationDelay: '1s', animationFillMode: 'both' }}>
+        <p className="text-base sm:text-lg md:text-2xl text-white/60 font-medium mt-6 md:mt-12 max-w-xl pl-2 border-l-2 border-white/20 animate-fade-in-up max-md:text-center max-md:border-none" style={{ animationDelay: '1s', animationFillMode: 'both' }}>
           The world's most advanced AI architecture tool.
           Stop guessing. Start rendering in absolute perfection.
         </p>
 
-        <div className="flex gap-6 mt-12 pl-2 animate-fade-in-up" style={{ animationDelay: '1.2s', animationFillMode: 'both' }}>
-          <MagneticButton className="px-10 py-5 rounded-full bg-white text-black font-bold tracking-widest uppercase hover:scale-105 transition-all">
+        <div className="flex flex-wrap gap-4 justify-center md:justify-start mt-6 md:mt-12 pl-2 animate-fade-in-up" style={{ animationDelay: '1.2s', animationFillMode: 'both' }}>
+          <MagneticButton className="px-6 py-3 md:px-10 md:py-5 rounded-full bg-white text-black font-bold text-sm md:text-base tracking-widest uppercase hover:scale-105 transition-all">
             <span className="flex items-center gap-3">
               Explore
               <ArrowRight className="w-5 h-5" />
             </span>
           </MagneticButton>
-          <MagneticButton className="px-10 py-5 rounded-full bg-white/5 backdrop-blur-md text-white font-bold tracking-widest uppercase border border-white/20 hover:bg-white/10 transition-all">
+          <MagneticButton className="px-6 py-3 md:px-10 md:py-5 rounded-full bg-white/5 backdrop-blur-md text-white font-bold text-sm md:text-base tracking-widest uppercase border border-white/20 hover:bg-white/10 transition-all">
             Showreel
           </MagneticButton>
         </div>
