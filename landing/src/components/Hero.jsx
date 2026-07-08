@@ -37,7 +37,7 @@ const Hero = () => {
       <FunkyLabel className="right-20 top-40 bg-blue-600/20 text-blue-300 border-blue-500/30 max-md:hidden">V. 2.4.0</FunkyLabel>
 
       {/* Background Video & Cinematic Gradient */}
-      <div className="absolute max-md:relative max-md:top-auto max-md:left-auto max-md:w-full max-md:h-[250px] max-md:mt-8 max-md:order-2 top-[5%] left-[50%] w-[45%] h-[85%] rounded-[40px] overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.8)] z-10">
+      <div className="absolute max-md:relative max-md:top-auto max-md:left-auto max-md:w-full max-md:aspect-[16/9] max-md:h-auto max-md:mt-8 max-md:order-2 top-[5%] left-[50%] w-[45%] h-[85%] rounded-[40px] overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.8)] z-10">
         <video
           ref={imageRef}
           src={homeVideo}
@@ -45,7 +45,7 @@ const Hero = () => {
           loop
           muted
           playsInline
-          className="absolute inset-0 w-[120%] h-[120%] -top-[10%] -left-[10%] object-cover opacity-80 scale-110"
+          className="absolute inset-0 w-full h-full object-cover opacity-80"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
         {/* Warm Sunlight Glow */}
