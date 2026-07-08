@@ -31,8 +31,8 @@ const Features = () => {
         </div>
 
         {/* Diagonal Image Container */}
-        <div className="relative w-[85%] max-md:w-[92vw] max-md:aspect-[16/9] max-w-5xl aspect-[16/9] mt-10 max-md:mt-4">
-          <div className="absolute inset-0 rounded-[40px] overflow-hidden shadow-[0_40px_80px_rgba(0,0,0,0.8)] rotate-[3deg] max-md:rotate-0 group z-10 border border-white/20">
+        <div className="relative w-[85%] max-md:w-[92vw] max-md:aspect-auto max-w-5xl aspect-[16/9] mt-10 max-md:mt-4 max-md:flex max-md:flex-col">
+          <div className="absolute max-md:relative inset-0 max-md:inset-auto max-md:w-full max-md:h-[220px] rounded-[40px] overflow-hidden shadow-[0_40px_80px_rgba(0,0,0,0.8)] rotate-[3deg] max-md:rotate-0 group z-10 border border-white/20">
             <img
               src={gardenCarImg}
               alt="Engine Features"
@@ -42,7 +42,7 @@ const Features = () => {
           </div>
 
           {/* Overlapping Glass Card */}
-          <div className="absolute max-md:relative max-md:bottom-auto max-md:right-auto max-md:w-full max-md:rotate-0 max-md:mt-6 max-md:p-6 glass-card p-8 rounded-[30px] w-96 max-md:w-full rotate-[-3deg] z-20">
+          <div className="absolute max-md:relative max-md:bottom-auto max-md:left-auto max-md:right-auto max-md:top-auto max-md:w-full max-md:rotate-0 max-md:mt-4 max-md:p-6 glass-card p-8 rounded-[30px] w-96 max-md:w-full rotate-[-3deg] z-20">
             <h3 className="text-3xl font-bold mb-4 text-purple-200">System Specs</h3>
             <div className="space-y-4">
               <p className="text-white/70 font-medium text-sm">
