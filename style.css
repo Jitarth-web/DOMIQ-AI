@@ -3782,6 +3782,35 @@ button, input, select, textarea {
     right: 10px !important;
     padding: 6px 10px !important;
   }
+
+  /* AI Assistant drawer overlays full screen on mobile & tablet sizes */
+  .ai-assistant-drawer {
+    width: 100% !important;
+    max-width: 100% !important;
+    right: -100% !important;
+  }
+
+  .ai-assistant-drawer.open {
+    right: 0 !important;
+  }
+
+  /* Immersive 3D Viewer Toolbar wrapping for mobile touchscreens */
+  .viewer-3d-toolbar {
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+    left: 8px !important;
+    right: 8px !important;
+    top: 8px !important;
+    padding: 6px !important;
+  }
+  
+  .viewer-3d-toolbar .control-divider {
+    display: none !important;
+  }
+  
+  #btn-camera-fp {
+    display: none !important; /* Hide walkthrough (WASD) on mobile as hardware keyboard is absent */
+  }
 }
 
 @media (max-width: 600px) {
@@ -3812,16 +3841,42 @@ button, input, select, textarea {
   .modal-body-content {
     padding: 16px !important;
   }
+
+  /* Horizontal scroll wrapper for bill of materials table */
+  #cost-estimator-container {
+    overflow-x: auto !important;
+    width: 100% !important;
+    scrollbar-width: thin !important;
+  }
+
+  .estimator-table {
+    min-width: 480px !important;
+  }
 }
 
 @media (max-width: 480px) {
-  /* AI assistant drawer overlays full screen on small phones */
-  .ai-assistant-drawer {
-    width: 100% !important;
-    right: -100% !important;
+  /* Auth Sign In / Sign Up Card padding and style updates */
+  .funky-auth-main {
+    padding: 24px 16px !important;
   }
 
-  .ai-assistant-drawer.open {
-    right: 0 !important;
+  /* AI Preset selector options grid wraps to single column on small screens */
+  .style-options-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .render-controls {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  /* Stack buttons vertically in the photorealistic rendering modal */
+  .modal-body-content div[style*="display: flex"] {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  .modal-body-content button {
+    width: 100% !important;
   }
 }

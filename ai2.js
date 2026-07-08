@@ -2205,6 +2205,8 @@ const ai = {
           <button class="btn btn-primary btn-glow" onclick="ai.triggerImageDownload('${render.url}')" style="flex: 1; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; color: #040508; border: none; cursor: pointer;">
             Download Image
           </button>
+        </div>
+      </div>
     `;
   },
 
